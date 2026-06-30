@@ -84,3 +84,16 @@ background:#1d4ed8;
     border-radius:50%;
     margin-bottom:25px;
 }
+
+footer {
+    margin-top: 80px;
+    padding: 40px 20px;
+    border-top: 1px solid #2b3557;
+    color: #aeb8d3;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+footer p {
+    margin: 10px 0;
+}
