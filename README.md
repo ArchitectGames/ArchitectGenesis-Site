@@ -18,6 +18,17 @@ npm run build
 npm run preview
 ```
 
+## Deploy to architectgenesis.com
+
+The repository is configured to deploy automatically to GitHub Pages when changes reach `main`. The custom domain is stored in `public/CNAME`.
+
+In the domain provider for `architectgenesis.com`, add:
+
+- `CNAME` record for `www` pointing to `architectgames.github.io`
+- `A` records for `@` pointing to `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, and `185.199.111.153`
+
+Then, in GitHub, open **Settings > Pages**, choose **GitHub Actions** as the source, and enable **Enforce HTTPS** after the first deployment completes. Redirect the root domain to `www` through the domain provider if it does not support the GitHub Pages apex records.
+
 ## What is in this preview
 
 - Cinematic homepage with eagle-like aerial camera over ten handcrafted worlds
