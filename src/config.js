@@ -19,12 +19,11 @@ export const SITE = {
  */
 export const LINKS = {
   appStore: `${typeof location !== "undefined" ? location.origin + location.pathname : ""}#/app`,
-  x: "#/community",
-  instagram: "#/community",
-  facebook: "#/community",
-  tiktok: "#/community",
-  discord: "#/community",
-  youtube: "#/community",
+  x: "https://x.com/ArchitectGen",
+  instagram: "https://www.instagram.com/architectgenesis/",
+  facebook: "https://www.facebook.com/architectgenesis",
+  tiktok: "https://www.tiktok.com/@ArchitectGen",
+  discord: "https://discord.com/",
   novel: "https://www.amazon.com/Josephus-Novel-B-Michael-Antler-ebook/dp/B089NYXM3B",
 };
 

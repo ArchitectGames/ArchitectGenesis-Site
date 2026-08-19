@@ -1,4 +1,4 @@
-import { FOUNDER, PLANS, GIFT_DURATIONS, SITE, asset } from "../config.js";
+import { FOUNDER, LINKS, PLANS, GIFT_DURATIONS, SITE, asset } from "../config.js";
 import { CIVILIZATIONS } from "../data/civilizations.js";
 import { state, persist, ensureFounder, makeCode } from "../state.js";
 
@@ -89,13 +89,25 @@ const PAGES = {
   ),
   "/community": () => wrap(
     "Community",
-    "Connect without the noise of a billboard.",
+    "Find ArchitectGenesis in the places where the conversation continues.",
     `
-    <p>Official ArchitectGenesis channels will live here as they open. Until handles are public, these doors lead back to the same house.</p>
-    <div class="grid-3">
-      ${["X", "Instagram", "Facebook", "TikTok", "Discord", "YouTube"].map((n) => `<div class="tile"><h3>${n}</h3><p>Official channel pending listing.</p></div>`).join("")}
+    <div class="social-directory">
+      <a class="social-card" href="${LINKS.x}" target="_blank" rel="noopener">
+        <span class="social-mark">X</span><span><strong>X</strong><small>@ArchitectGen</small></span>
+      </a>
+      <a class="social-card" href="${LINKS.instagram}" target="_blank" rel="noopener">
+        <span class="social-mark">IG</span><span><strong>Instagram</strong><small>@architectgenesis</small></span>
+      </a>
+      <a class="social-card" href="${LINKS.tiktok}" target="_blank" rel="noopener">
+        <span class="social-mark">TT</span><span><strong>TikTok</strong><small>@ArchitectGen</small></span>
+      </a>
+      <a class="social-card" href="${LINKS.facebook}" target="_blank" rel="noopener">
+        <span class="social-mark">f</span><span><strong>Facebook Page</strong><small>ArchitectGenesis</small></span>
+      </a>
+      <a class="social-card" href="${LINKS.discord}" target="_blank" rel="noopener">
+        <span class="social-mark">Dc</span><span><strong>Discord</strong><small>@architectgenesis</small></span>
+      </a>
     </div>
-    <p class="notice">No follower counts. No banners. When a channel is live, the homepage icons will point there.</p>
     `
   ),
   "/support": () => wrap(
