@@ -75,8 +75,7 @@ export class AudioEngine {
   }
 
   playTheme(civ) {
-    if (!this.ready || !civ || this.themeId === civ.id) return;
-    this.loadTheme(civ);
+    return;
   }
 
   async loadTheme(civ) {
