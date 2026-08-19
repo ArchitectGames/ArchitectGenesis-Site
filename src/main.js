@@ -1,0 +1,257 @@
+import "./styles.css";
+import QRCode from "qrcode";
+import { CIVILIZATIONS } from "./data/civilizations.js";
+import { LINKS, CAROUSEL, asset } from "./config.js";
+import { state, persist } from "./state.js";
+import { LivingWorld } from "./world/LivingWorld.js";
+import { AudioEngine } from "./audio/AudioEngine.js";
+import { PortalSequence } from "./portal/PortalSequence.js";
+import { SituationRoom } from "./demo/SituationRoom.js";
+import { renderPage, bindPage } from "./pages/pages.js";
+
+const $ = (id) => document.getElementById(id);
+
+const world = new LivingWorld($("world-canvas"), $("world-fallback"));
+const audio = new AudioEngine();
+const portal = new PortalSequence($("portal-overlay"), $("portal-canvas"), $("portal-title"), $("portal-year"));
+const room = new SituationRoom($("simulate-root"), {
+  audio,
+  world,
+  onExit: () => {
+    location.hash = "/";
+  },
+});
+
+let carouselTimer = null;
+let resumeTimer = null;
+let paused = false;
+let suppressHash = false;
+let currentIndex = state.civIndex || 0;
+
+function civ() {
+  return CIVILIZATIONS[currentIndex];
+}
+
+function setCiv(index, { fromUser = false, immediate = false } = {}) {
+  currentIndex = (index + CIVILIZATIONS.length) % CIVILIZATIONS.length;
+  state.civIndex = currentIndex;
+  persist(true);
+  const c = civ();
+  $("civ-era").textContent = c.era;
+  $("civ-name").textContent = c.name;
+  $("civ-year").textContent = c.year;
+  $("civ-slogan").textContent = c.slogan;
+  world.setCivilization(currentIndex, { immediate });
+  audio.playTheme(c);
+  document.querySelectorAll(".carousel-dots button").forEach((b, i) => {
+    b.setAttribute("aria-selected", i === currentIndex ? "true" : "false");
+  });
+  if (fromUser) pauseCarousel();
+}
+
+function buildDots() {
+  const host = $("carousel-dots");
+  host.innerHTML = CIVILIZATIONS.map(
+    (c, i) =>
+      `<button type="button" role="tab" aria-label="${c.name}" aria-selected="${i === currentIndex}"></button>`
+  ).join("");
+  host.querySelectorAll("button").forEach((btn, i) => {
+    btn.addEventListener("click", () => setCiv(i, { fromUser: true }));
+  });
+}
+
+function startCarousel() {
+  stopCarousel();
+  carouselTimer = setInterval(() => {
+    if (document.body.dataset.view !== "home" || paused) return;
+    setCiv(currentIndex + 1);
+  }, CAROUSEL.intervalMs);
+}
+
+function stopCarousel() {
+  if (carouselTimer) clearInterval(carouselTimer);
+  carouselTimer = null;
+}
+
+function pauseCarousel() {
+  paused = true;
+  if (resumeTimer) clearTimeout(resumeTimer);
+  resumeTimer = setTimeout(() => {
+    paused = false;
+  }, CAROUSEL.resumeMs);
+}
+
+async function paintQr() {
+  const canvas = $("qr-canvas");
+  const url = LINKS.appStore.includes("#")
+    ? `${location.origin}${location.pathname}#/app`
+    : LINKS.appStore;
+  try {
+    await QRCode.toCanvas(canvas, url, {
+      width: 128,
+      margin: 1,
+      color: { dark: "#f0d9a0", light: "#070b14" },
+    });
+  } catch {
+    /* ignore */
+  }
+}
+
+function routeFromHash() {
+  const raw = location.hash.replace(/^#/, "") || "/";
+  const [path, query] = raw.split("?");
+  const params = new URLSearchParams(query || "");
+  return { path: path.startsWith("/") ? path : `/${path}`, params };
+}
+
+function setView(name) {
+  document.body.dataset.view = name;
+  $("home-chrome").hidden = name !== "home";
+  $("page-root").hidden = name !== "page";
+  $("simulate-root").hidden = name !== "simulate";
+  if (name !== "simulate") room.hide();
+  world.setMode(name === "simulate" ? "simulate" : name === "home" ? "home" : "page");
+}
+
+function markNav(path) {
+  document.querySelectorAll(".nav a").forEach((a) => {
+    const href = a.getAttribute("href");
+    a.setAttribute("aria-current", href === `#${path}` ? "page" : "false");
+  });
+  $("nav-login").textContent = state.founder ? "Account" : "Login";
+  $("nav-login").setAttribute("href", state.founder ? "#/account" : "#/login");
+}
+
+async function goSimulate({ playPortal = true } = {}) {
+  const c = civ();
+  stopCarousel();
+  if (playPortal) {
+    audio.playPortal();
+    world.setMode("portal");
+    await portal.run(c, { onDive: (a) => world.dive(a) });
+    world.dive(0);
+  }
+  if (location.hash !== "#/simulate") {
+    suppressHash = true;
+    location.hash = "/simulate";
+    suppressHash = false;
+  }
+  setView("simulate");
+  world.setMode("simulate");
+  audio.playTheme(c);
+  room.start(c);
+}
+
+function renderRoute() {
+  if (suppressHash) return;
+  const { path, params } = routeFromHash();
+  if (params.get("civ")) {
+    const idx = CIVILIZATIONS.findIndex((c) => c.id === params.get("civ"));
+    if (idx >= 0) {
+      setCiv(idx, { immediate: true });
+      if (path === "/") {
+        history.replaceState(null, "", `${location.pathname}${location.search}#/`);
+      }
+    }
+  }
+
+  markNav(path);
+
+  if (path === "/" || path === "") {
+    setView("home");
+    startCarousel();
+    return;
+  }
+
+  if (path === "/simulate") {
+    goSimulate({ playPortal: false });
+    return;
+  }
+
+  stopCarousel();
+  setView("page");
+  const root = $("page-root");
+  root.innerHTML = renderPage(path);
+  bindPage(path, root);
+}
+
+function bindChrome() {
+  $("civ-prev").addEventListener("click", () => setCiv(currentIndex - 1, { fromUser: true }));
+  $("civ-next").addEventListener("click", () => setCiv(currentIndex + 1, { fromUser: true }));
+  $("btn-simulate").addEventListener("click", () => goSimulate({ playPortal: true }));
+
+  $("nav-toggle").addEventListener("click", () => {
+    const open = $("nav").classList.toggle("open");
+    $("nav-toggle").setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  $("nav").addEventListener("click", () => $("nav").classList.remove("open"));
+
+  $("signup-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = $("signup-email").value.trim();
+    if (!email) return;
+    if (!state.mailing.includes(email)) state.mailing.push(email);
+    persist();
+    $("signup-msg").hidden = false;
+    $("signup-msg").textContent = "You are on the list for launch news.";
+    $("signup-email").value = "";
+  });
+
+  $("qr-plaque").addEventListener("click", () => {
+    location.hash = "/app";
+  });
+  $("qr-plaque").style.cursor = "pointer";
+
+  const muteBtn = $("btn-mute");
+  const syncMute = () => {
+    muteBtn.setAttribute("aria-label", state.audio.muted ? "Unmute" : "Mute");
+    muteBtn.style.opacity = state.audio.muted ? "0.55" : "1";
+  };
+  muteBtn.addEventListener("click", async () => {
+    await audio.unlock();
+    audio.setMuted(!state.audio.muted);
+    if (!state.audio.muted) audio.playTheme(civ());
+    $("sound-hint").hidden = true;
+    syncMute();
+  });
+  syncMute();
+
+  $("vol-master").value = state.audio.master;
+  $("vol-music").value = state.audio.music;
+  $("vol-sfx").value = state.audio.sfx;
+  $("vol-master").addEventListener("input", (e) => audio.setVolume("master", e.target.value));
+  $("vol-music").addEventListener("input", (e) => audio.setVolume("music", e.target.value));
+  $("vol-sfx").addEventListener("input", (e) => audio.setVolume("sfx", e.target.value));
+
+  $("btn-enable-sound").addEventListener("click", async () => {
+    await audio.unlock();
+    audio.setMuted(false);
+    audio.playTheme(civ());
+    $("sound-hint").hidden = true;
+    syncMute();
+  });
+  $("btn-dismiss-sound").addEventListener("click", () => {
+    $("sound-hint").hidden = true;
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (document.body.dataset.view !== "home") return;
+    if (e.key === "ArrowLeft") setCiv(currentIndex - 1, { fromUser: true });
+    if (e.key === "ArrowRight") setCiv(currentIndex + 1, { fromUser: true });
+    if (e.key === "Enter") goSimulate({ playPortal: true });
+    if (e.key === "m" || e.key === "M") muteBtn.click();
+  });
+}
+
+async function boot() {
+  buildDots();
+  bindChrome();
+  await world.init();
+  setCiv(currentIndex, { immediate: true });
+  await paintQr();
+  $("sound-hint").hidden = false;
+  window.addEventListener("hashchange", renderRoute);
+  renderRoute();
+}
+
+boot();
