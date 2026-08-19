@@ -198,10 +198,11 @@ export class LivingWorld {
         const radius = this.mode === "simulate" ? 9.2 : 11.4;
         const height = this.mode === "simulate" ? 5.6 : 7.1;
         const dive = this.diveAmt || 0;
+        const orbitAngle = Math.sin(t * soar) * (Math.PI / 6);
         this.camera.position.set(
-          Math.sin(t * soar) * radius,
+          Math.sin(orbitAngle) * radius,
           height + Math.sin(t * soar * 0.7) * 0.7 - dive * 3.5,
-          Math.cos(t * soar * 0.92) * radius * 0.9
+          Math.cos(orbitAngle) * radius
         );
         this.camera.lookAt(0, 1.2 - dive * 2, 0);
         const pos = this.particles.geometry.attributes.position;
