@@ -51,7 +51,6 @@ const PAGES = {
     "Support the simulation. Keep history permanent.",
     plansHtml() + `<p class="notice">Web billing and App Store subscriptions will both be available at launch. This preview shows the catalog without charging a card.</p>`
   ),
-  "/store": (_, ctx) => storeHtml(ctx),
   "/about": () => wrap(
     "About ArchitectGenesis",
     "Why is ArchitectGenesis different from every other civilization game?",
@@ -227,12 +226,6 @@ function accountHtml() {
   const f = state.founder;
   if (!f) return wrap("Account", "A Founder session is required.", `<p><a class="primary" href="#/login">Login</a></p>`);
   return `<article class="page-card account-grid">
-    <nav class="side-links">
-      <a href="#/account" class="active">Overview</a>
-      <a href="#/store">Store</a>
-      <a href="#/store">Redeem code</a>
-      <a href="#/store">Referrals</a>
-    </nav>
     <div>
       <h1>${escapeHtml(f.name)}</h1>
       <p class="lead">Founder since ${new Date(f.since).toLocaleDateString()}</p>

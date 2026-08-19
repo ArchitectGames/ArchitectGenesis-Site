@@ -7,25 +7,17 @@ const sampleCount = sampleRate * duration;
 const outputDir = path.resolve("public/audio");
 
 const profiles = [
-  { id: "first-hearth", bpm: 52, root: 98, scale: [0, 3, 5, 7, 10], phrase: [0, 3, 0, 5, 7, 3], step: 1, wave: "flute", texture: "fire" },
-  { id: "sothara", bpm: 64, root: 130, scale: [0, 2, 5, 7, 9, 10], phrase: [0, 5, 2, 9, 7, 5], step: 1.5, wave: "reed", texture: "reed" },
-  { id: "jade-mandate", bpm: 58, root: 118, scale: [0, 2, 3, 7, 9], phrase: [0, 2, 3, 7, 9, 7], step: 1.25, wave: "qin", texture: "bell" },
-  { id: "helion-league", bpm: 72, root: 146, scale: [0, 2, 4, 5, 7, 9, 11], phrase: [0, 4, 7, 11, 9, 7], step: 0.75, wave: "lyre", texture: "sea" },
-  { id: "blackwood-crown", bpm: 56, root: 110, scale: [0, 2, 3, 7, 8, 10], phrase: [0, 7, 3, 0, 5], step: 2, wave: "chant", texture: "bell" },
-  { id: "vesper-atelier", bpm: 76, root: 156, scale: [0, 2, 4, 5, 7, 9, 11], phrase: [0, 4, 7, 5, 9, 11, 7], step: 0.5, wave: "lute", texture: "workshop" },
-  { id: "ironwake", bpm: 88, root: 90, scale: [0, 2, 3, 5, 7, 8, 10], phrase: [0, 0, 3, 0, 7, 0], step: 0.5, wave: "engine", texture: "machine" },
-  { id: "meridian-city", bpm: 96, root: 140, scale: [0, 2, 4, 7, 9, 11], phrase: [0, 7, 4, 11, 7, 2], step: 0.5, wave: "synth", texture: "grid" },
-  { id: "aetheris", bpm: 84, root: 128, scale: [0, 2, 5, 7, 9, 10], phrase: [0, 7, 12, 9, 14], step: 1.75, wave: "glass", texture: "air" },
-  { id: "vega-ark", bpm: 48, root: 82, scale: [0, 2, 4, 7, 9], phrase: [0, 12, 7, 19, 14], step: 2.5, wave: "orbital", texture: "signal" },
+  { id: "first-hearth", bpm: 38, root: 73, scale: [0, 3, 5, 7, 10], phrase: [0, 3, 0, 5, 7, 3], step: 2.2, style: "flute", wave: "flute", effect: "none" },
+  { id: "sothara", bpm: 116, root: 196, scale: [0, 2, 5, 7, 9, 10], phrase: [0, 5, 2, 9, 7, 5], step: 0.5, style: "reed", wave: "reed", effect: "reed" },
+  { id: "jade-mandate", bpm: 46, root: 110, scale: [0, 2, 3, 7, 9], phrase: [0, 2, 3, 7, 9, 7], step: 1.8, style: "qin", wave: "qin", effect: "chimes" },
+  { id: "helion-league", bpm: 132, root: 220, scale: [0, 2, 4, 5, 7, 9, 11], phrase: [0, 4, 7, 11, 9, 7], step: 0.25, style: "lyre", wave: "lyre", effect: "harbor" },
+  { id: "blackwood-crown", bpm: 42, root: 65, scale: [0, 2, 3, 7, 8, 10], phrase: [0, 7, 3, 0, 5], step: 3, style: "chant", wave: "chant", effect: "bells" },
+  { id: "vesper-atelier", bpm: 168, root: 330, scale: [0, 2, 4, 5, 7, 9, 11], phrase: [0, 4, 7, 5, 9, 11, 7], step: 0.25, style: "lute", wave: "lute", effect: "workshop" },
+  { id: "ironwake", bpm: 104, root: 55, scale: [0, 2, 3, 5, 7, 8, 10], phrase: [0, 0, 3, 0, 7, 0], step: 0.25, style: "engine", wave: "engine", effect: "clanks" },
+  { id: "meridian-city", bpm: 128, root: 165, scale: [0, 2, 4, 7, 9, 11], phrase: [0, 7, 4, 11, 7, 2], step: 0.25, style: "synth", wave: "synth", effect: "traffic" },
+  { id: "aetheris", bpm: 58, root: 260, scale: [0, 2, 5, 7, 9, 10], phrase: [0, 7, 12, 9, 14], step: 2, style: "glass", wave: "glass", effect: "birds" },
+  { id: "vega-ark", bpm: 52, root: 82, scale: [0, 2, 4, 7, 9], phrase: [0, 7, 12, 7, 14, 12], step: 1.25, style: "orbital", wave: "orbital", effect: "beacon" },
 ];
-
-const random = (seed) => {
-  let value = seed;
-  return () => {
-    value = (value * 1664525 + 1013904223) >>> 0;
-    return value / 0x100000000;
-  };
-};
 
 const noteFrequency = (root, semitone) => root * 2 ** (semitone / 12);
 
@@ -57,7 +49,6 @@ function writeWav(filePath, samples) {
 
 function makePreview(profile, index) {
   const output = new Float32Array(sampleCount);
-  const noise = random(9001 + index * 177);
   const beat = 60 / profile.bpm;
   const noteLength = beat * profile.step * (profile.wave === "orbital" ? 1.8 : profile.wave === "engine" ? 0.55 : 1.15);
   const notes = [];
@@ -70,8 +61,21 @@ function makePreview(profile, index) {
 
   for (let indexSample = 0; indexSample < sampleCount; indexSample++) {
     const time = indexSample / sampleRate;
-    let value = Math.sin(time * profile.root * Math.PI * 2) * (profile.wave === "orbital" ? 0.09 : 0.035);
-    value += Math.sin(time * profile.root * 0.5 * Math.PI * 2) * (profile.wave === "engine" ? 0.08 : 0.018);
+    const beatPhase = time / beat;
+    let value = profile.style === "flute" ? 0 : Math.sin(time * profile.root * Math.PI * 2) * 0.02;
+    if (profile.style === "reed") value += Math.sin(time * profile.root * 0.5 * Math.PI * 2) * 0.08;
+    if (profile.style === "chant") {
+      value += Math.sin(time * profile.root * Math.PI * 2) * 0.07;
+      value += Math.sin(time * profile.root * 1.5 * Math.PI * 2) * 0.055;
+      value += Math.sin(time * profile.root * 2 * Math.PI * 2) * 0.035;
+    }
+    if (profile.style === "engine") value += oscillator("square", beatPhase * Math.PI * 2) * 0.1;
+    if (profile.style === "synth") value += oscillator("square", beatPhase * Math.PI * 2) * 0.045;
+    if (profile.style === "glass") value += Math.sin(time * profile.root * 3.98 * Math.PI * 2) * 0.045;
+    if (profile.style === "orbital") {
+      value += Math.sin(time * profile.root * 0.5 * Math.PI * 2) * 0.1;
+      value += Math.sin(time * profile.root * 1.5 * Math.PI * 2) * 0.035;
+    }
 
     for (const note of notes) {
       const elapsed = time - note.time;
@@ -85,14 +89,18 @@ function makePreview(profile, index) {
       if (profile.wave === "lyre" || profile.wave === "lute") tone = Math.sin(phase) * 0.75 + Math.sin(phase * 2.01) * 0.2;
       if (profile.wave === "chant") tone = Math.sin(phase) * 0.8 + Math.sin(phase * 0.5) * 0.18;
       if (profile.wave === "glass") tone = Math.sin(phase) * 0.7 + Math.sin(phase * 3.98) * 0.18;
-      value += tone * envelope * 0.16 * note.strength;
+      const level = profile.style === "flute" ? 0.12 : profile.style === "chant" ? 0.08 : profile.style === "engine" ? 0.22 : 0.18;
+      value += tone * envelope * level * note.strength;
     }
 
     const texturePulse = Math.sin(time * Math.PI * 2 / (profile.texture === "machine" ? 0.34 : profile.texture === "grid" ? 0.48 : 1.9));
-    if (profile.texture === "fire" || profile.texture === "reed" || profile.texture === "workshop") value += (noise() * 2 - 1) * 0.012 * Math.max(0, texturePulse);
+    if (profile.texture === "fire") value += Math.sin(time * 73 * Math.PI * 2) * Math.max(0, texturePulse) * 0.004;
+    if (profile.texture === "reed") value += Math.sin(time * 196 * Math.PI * 2) * Math.max(0, texturePulse) * 0.004;
+    if (profile.texture === "workshop") value += Math.sin(time * 311 * Math.PI * 2) * Math.max(0, texturePulse) * 0.003;
     if (profile.texture === "machine" || profile.texture === "grid") value += texturePulse * 0.025;
     if (profile.texture === "bell" || profile.texture === "signal") value += Math.sin(time * Math.PI * 2 * (profile.texture === "bell" ? 440 : 220)) * Math.max(0, texturePulse) * 0.012;
-    if (profile.texture === "sea" || profile.texture === "air") value += (noise() * 2 - 1) * 0.006;
+    if (profile.texture === "sea") value += Math.sin(time * 0.31 * Math.PI * 2) * 0.005;
+    if (profile.texture === "air") value += Math.sin(time * 0.17 * Math.PI * 2) * 0.004;
 
     const fade = Math.min(1, time / 0.5, (duration - time) / 0.7);
     output[indexSample] = value * Math.max(0, fade);
@@ -100,8 +108,49 @@ function makePreview(profile, index) {
   return output;
 }
 
+const EFFECTS = {
+  fire: [88, 180, 0.16, "triangle", 0.9],
+  reed: [640, 920, 0.22, "triangle", 1.3],
+  chimes: [880, 1760, 1.4, "sine", 2.4],
+  harbor: [520, 760, 0.18, "sine", 0.8],
+  bells: [220, 440, 1.8, "triangle", 3.2],
+  workshop: [440, 660, 0.08, "square", 0.55],
+  clanks: [70, 110, 0.11, "square", 0.38],
+  traffic: [120, 240, 0.08, "square", 0.28],
+  birds: [900, 1500, 0.16, "sine", 2.8],
+  beacon: [180, 360, 0.7, "sine", 4.2],
+};
+
+function makeEffects(profile, index) {
+  const output = new Float32Array(sampleCount);
+  if (profile.effect === "none") return output;
+  const [low, high, duration, wave, interval] = EFFECTS[profile.effect];
+  const events = [];
+  for (let time = (index % 3) * interval * 0.3; time < 16; time += interval) {
+    events.push({ time, frequency: low + ((events.length * 37) % 100) / 100 * (high - low) });
+  }
+  for (let indexSample = 0; indexSample < sampleCount; indexSample++) {
+    const time = indexSample / sampleRate;
+    let value = 0;
+    for (const event of events) {
+      const elapsed = time - event.time;
+      if (elapsed < 0 || elapsed > duration) continue;
+      const phase = elapsed * event.frequency * Math.PI * 2;
+      const envelope = Math.min(1, elapsed / 0.008) * Math.max(0, 1 - elapsed / duration) ** 2;
+      let tone = oscillator(wave, phase);
+      if (profile.effect === "birds" || profile.effect === "reed" || profile.effect === "harbor") {
+        tone = Math.sin(phase * (1 + Math.sin(elapsed * 9) * 0.08));
+      }
+      value += tone * envelope * 0.08;
+    }
+    output[indexSample] = value * Math.min(1, time / 0.5, (duration - time) / 0.7);
+  }
+  return output;
+}
+
 fs.mkdirSync(outputDir, { recursive: true });
 for (const [index, profile] of profiles.entries()) {
   writeWav(path.join(outputDir, `${profile.id}.wav`), makePreview(profile, index));
+  writeWav(path.join(outputDir, `${profile.id}-effects.wav`), makeEffects(profile, index));
 }
-console.log(`Generated ${profiles.length} civilization previews in ${outputDir}`);
+console.log(`Generated ${profiles.length} music and effects stems in ${outputDir}`);

@@ -131,7 +131,7 @@ function renderRoute() {
     return;
   }
 
-  if (path === "/simulate" || path === "/demo") {
+  if (path === "/simulate" || path === "/demo" || path === "/store") {
     location.hash = "/";
     return;
   }
