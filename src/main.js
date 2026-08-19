@@ -106,8 +106,6 @@ function markNav(path) {
     const href = a.getAttribute("href");
     a.setAttribute("aria-current", href === `#${path}` ? "page" : "false");
   });
-  $("nav-login").textContent = state.founder ? "Account" : "Login";
-  $("nav-login").setAttribute("href", state.founder ? "#/account" : "#/login");
 }
 
 function renderRoute() {
@@ -131,7 +129,7 @@ function renderRoute() {
     return;
   }
 
-  if (path === "/simulate" || path === "/demo" || path === "/store") {
+  if (path === "/simulate" || path === "/demo" || path === "/store" || path === "/login") {
     location.hash = "/";
     return;
   }

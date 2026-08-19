@@ -185,7 +185,7 @@ function storeHtml() {
     ${
       founder
         ? `<p>Your referral code is <strong>${founder.referral}</strong>. Share <code>${founder.referralLink}</code>. Self-referrals are refused.</p>`
-        : `<p><a href="#/login">Login</a> to receive a personal referral code, link, and QR.</p>`
+        : `<p>A Founder session is required to receive a personal referral code, link, and QR.</p>`
     }
     <p class="notice">Secure web billing and platform storefronts connect at launch. Preview actions issue local demonstration codes only.</p>
     `
@@ -220,7 +220,7 @@ function loginHtml() {
 
 function accountHtml() {
   const f = state.founder;
-  if (!f) return wrap("Account", "A Founder session is required.", `<p><a class="primary" href="#/login">Login</a></p>`);
+  if (!f) return wrap("Account", "A Founder session is required.", `<p>Founder access is currently unavailable.</p>`);
   return `<article class="page-card account-grid">
     <div>
       <h1>${escapeHtml(f.name)}</h1>
