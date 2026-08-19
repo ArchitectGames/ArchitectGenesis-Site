@@ -25,7 +25,7 @@ const PAGES = {
       <li>Continue History, or Time Travel.</li>
     </ol>
     <h2>Time Travel</h2>
-    <p>After the first chapter, you may rewind. Buildings deconstruct, armies reverse, years run backward. Previously chosen directives remain visible, marked <strong>Already Explored</strong>, and cannot be selected again until the demonstration is restarted.</p>
+    <p>After the first chapter, you may rewind. Buildings deconstruct, armies reverse, years run backward.</p>
     `
   ),
   "/features": () => wrap(
