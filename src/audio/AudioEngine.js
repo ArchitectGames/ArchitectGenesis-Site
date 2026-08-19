@@ -86,6 +86,11 @@ export class AudioEngine {
       }
     }
     this.nodes = [];
+    try {
+      this.music?.disconnect();
+    } catch {
+      /* already disconnected */
+    }
     this.themeId = null;
   }
 
@@ -95,40 +100,16 @@ export class AudioEngine {
     this.crossfadeTo(civ);
   }
 
-  async crossfadeTo(civ) {
+  crossfadeTo(civ) {
     const ctx = this.ctx;
     if (!ctx) return;
-    const oldMusic = this.music;
+    this.stopTheme();
     const next = ctx.createGain();
-    next.gain.value = 0;
+    next.gain.value = state.audio.music;
     next.connect(this.master);
-    const previousNodes = this.nodes.slice();
-    this.nodes = [];
     this.music = next;
     this.themeId = civ.id;
     this.buildTheme(civ, next);
-    const now = ctx.currentTime;
-    next.gain.linearRampToValueAtTime(state.audio.music, now + 1.6);
-    oldMusic.gain.linearRampToValueAtTime(0, now + 1.6);
-    setTimeout(() => {
-      for (const n of previousNodes) {
-        try {
-          n.stop?.();
-        } catch {
-          /* */
-        }
-        try {
-          n.disconnect();
-        } catch {
-          /* */
-        }
-      }
-      try {
-        oldMusic.disconnect();
-      } catch {
-        /* */
-      }
-    }, 1800);
   }
 
   buildTheme(civ, dest) {
