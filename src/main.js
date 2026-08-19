@@ -122,11 +122,10 @@ function markNav(path) {
   $("nav-login").setAttribute("href", state.founder ? "#/account" : "#/login");
 }
 
-async function goSimulate({ playPortal = true } = {}) {
+async function goSimulate({ transition = true } = {}) {
   const c = civ();
   stopCarousel();
-  if (playPortal) {
-    audio.playPortal();
+  if (transition) {
     world.setMode("portal");
     await portal.run(c, { onDive: (a) => world.dive(a) });
     world.dive(0);
@@ -164,7 +163,7 @@ function renderRoute() {
   }
 
   if (path === "/simulate") {
-    goSimulate({ playPortal: false });
+    goSimulate({ transition: false });
     return;
   }
 
@@ -178,7 +177,7 @@ function renderRoute() {
 function bindChrome() {
   $("civ-prev").addEventListener("click", () => setCiv(currentIndex - 1, { fromUser: true }));
   $("civ-next").addEventListener("click", () => setCiv(currentIndex + 1, { fromUser: true }));
-  $("btn-simulate").addEventListener("click", () => goSimulate({ playPortal: true }));
+  $("btn-simulate").addEventListener("click", () => goSimulate());
 
   $("nav-toggle").addEventListener("click", () => {
     const open = $("nav").classList.toggle("open");
@@ -242,7 +241,7 @@ function bindChrome() {
     if (document.body.dataset.view !== "home") return;
     if (e.key === "ArrowLeft") setCiv(currentIndex - 1, { fromUser: true });
     if (e.key === "ArrowRight") setCiv(currentIndex + 1, { fromUser: true });
-    if (e.key === "Enter") goSimulate({ playPortal: true });
+    if (e.key === "Enter") goSimulate();
     if (e.key === "m" || e.key === "M") muteBtn.click();
   });
 }

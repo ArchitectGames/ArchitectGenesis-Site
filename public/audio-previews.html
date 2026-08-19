@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ArchitectGenesis Audio Previews</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --ink: #f3ead8;
+        --muted: #b7a88c;
+        --gold: #d4b483;
+        --navy: #070b14;
+        --panel: rgba(15, 23, 35, 0.9);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        padding: 48px 22px;
+        background: radial-gradient(circle at top, #182437 0, var(--navy) 52%);
+        color: var(--ink);
+        font-family: Georgia, serif;
+      }
+      main { width: min(980px, 100%); margin: 0 auto; }
+      a { color: var(--gold); }
+      header { margin-bottom: 32px; }
+      p { color: var(--muted); line-height: 1.5; }
+      h1 { margin: 0 0 8px; font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 400; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+      article {
+        padding: 18px;
+        border: 1px solid rgba(212, 180, 131, 0.3);
+        background: var(--panel);
+      }
+      h2 { margin: 0 0 4px; font-size: 1.15rem; font-weight: 400; }
+      .era { margin: 0 0 14px; color: var(--muted); font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; }
+      audio { width: 100%; accent-color: var(--gold); }
+      .back { display: inline-block; margin-top: 30px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>ArchitectGenesis Audio Previews</h1>
+        <p>Standalone procedural music studies for each civilization loop. Use the native players to compare the palettes without entering the simulation.</p>
+      </header>
+      <section class="grid" aria-label="Civilization audio previews">
+        <article><h2>The First Hearth</h2><p class="era">Prehistory · 12,000 BC</p><audio controls preload="metadata" src="/audio/first-hearth.wav"></audio></article>
+        <article><h2>Sothara</h2><p class="era">Ancient World · 2686 BC</p><audio controls preload="metadata" src="/audio/sothara.wav"></audio></article>
+        <article><h2>The Jade Mandate</h2><p class="era">Ancient World · 210 BC</p><audio controls preload="metadata" src="/audio/jade-mandate.wav"></audio></article>
+        <article><h2>The Helion League</h2><p class="era">Classical World · 431 BC</p><audio controls preload="metadata" src="/audio/helion-league.wav"></audio></article>
+        <article><h2>Blackwood Crown</h2><p class="era">Medieval Era · 1215</p><audio controls preload="metadata" src="/audio/blackwood-crown.wav"></audio></article>
+        <article><h2>Vesper Atelier</h2><p class="era">Renaissance · 1519</p><audio controls preload="metadata" src="/audio/vesper-atelier.wav"></audio></article>
+        <article><h2>Ironwake</h2><p class="era">Industrial Revolution · 1871</p><audio controls preload="metadata" src="/audio/ironwake.wav"></audio></article>
+        <article><h2>Meridian City</h2><p class="era">Modern Civilization · 2026</p><audio controls preload="metadata" src="/audio/meridian-city.wav"></audio></article>
+        <article><h2>Aetheris</h2><p class="era">Near Future · 2091</p><audio controls preload="metadata" src="/audio/aetheris.wav"></audio></article>
+        <article><h2>The Vega Ark</h2><p class="era">Spacefaring Civilization · 3402</p><audio controls preload="metadata" src="/audio/vega-ark.wav"></audio></article>
+      </section>
+      <a class="back" href="/">Return to ArchitectGenesis</a>
+    </main>
+  </body>
+</html>

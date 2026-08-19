@@ -130,7 +130,6 @@ export class SituationRoom {
     const choice = ch.choices.find((c) => c.id === id);
     if (!choice) return;
     if (this.exploredSet().includes(id)) return;
-    this.audio?.playUI();
     const stats = { ...this.d.stats };
     for (const [k, v] of Object.entries(choice.effects || {})) {
       if (!(k in stats)) continue;
@@ -155,13 +154,11 @@ export class SituationRoom {
     this.d.phase = "report";
     this.d.lastChoice = null;
     persist(true);
-    this.audio?.playUI();
     this.render();
   }
 
   async timeTravel() {
     if (!this.d.history.length) return;
-    this.audio?.playUI();
     document.body.classList.add("rewinding");
     this.world?.setReverse(true);
     const ticker = this.root.querySelector("#year-ticker");
