@@ -151,21 +151,18 @@ function bindChrome() {
   });
   $("nav").addEventListener("click", () => $("nav").classList.remove("open"));
 
-  $("signup-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const email = $("signup-email").value.trim();
-    if (!email) return;
-    if (!state.mailing.includes(email)) state.mailing.push(email);
-    persist();
-    $("signup-msg").hidden = false;
-    $("signup-msg").textContent = "You are on the list for launch news.";
-    $("signup-email").value = "";
-  });
-
   $("qr-plaque").addEventListener("click", () => {
     location.hash = "/app";
   });
   $("qr-plaque").style.cursor = "pointer";
+
+  $("signup-form").addEventListener("submit", () => {
+    const email = $("signup-email").value.trim();
+    if (!email) return;
+    $("signup-msg").hidden = false;
+    $("signup-msg").textContent = "You are on the list for launch news.";
+    $("signup-email").value = "";
+  });
 
   const muteBtn = $("btn-mute");
   const audioSliders = $("audio-sliders");

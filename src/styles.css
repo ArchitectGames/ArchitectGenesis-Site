@@ -514,6 +514,10 @@ body[data-view="simulate"] .vignette {
   font-size: 0.72rem;
 }
 
+.brevo-submit-frame {
+  display: none;
+}
+
 .qr-plaque {
   position: fixed;
   right: 22px;
