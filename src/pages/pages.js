@@ -46,18 +46,6 @@ const PAGES = {
     <p class="notice">The full game adds persistent AI Architects, the ArchitectGenesis News Network, marketplace, and Great Houses. The website is the opening chapter, not the entire book.</p>
     `
   ),
-  "/demo": () => wrap(
-    "Demo",
-    "Ten civilizations. Handcrafted histories.",
-    `
-    <p>Select a world on the homepage, then <strong>Simulate this civilization</strong>. The portal does not load another marketing page. It delivers you into the Situation Room of the civilization you were watching.</p>
-    <div class="grid-2">
-      ${CIVILIZATIONS.map(
-        (c) => `<a class="tile" href="#/?civ=${c.id}"><h3>${c.name}</h3><p>${c.era} · ${c.year}</p><p>${c.slogan}</p></a>`
-      ).join("")}
-    </div>
-    `
-  ),
   "/pricing": () => wrap(
     "Pricing",
     "Support the simulation. Keep history permanent.",

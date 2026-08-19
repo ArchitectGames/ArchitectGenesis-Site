@@ -5,22 +5,12 @@ import { LINKS, CAROUSEL, asset } from "./config.js";
 import { state, persist } from "./state.js";
 import { LivingWorld } from "./world/LivingWorld.js";
 import { AudioEngine } from "./audio/AudioEngine.js";
-import { PortalSequence } from "./portal/PortalSequence.js";
-import { SituationRoom } from "./demo/SituationRoom.js";
 import { renderPage, bindPage } from "./pages/pages.js";
 
 const $ = (id) => document.getElementById(id);
 
 const world = new LivingWorld($("world-canvas"), $("world-fallback"));
 const audio = new AudioEngine();
-const portal = new PortalSequence($("portal-overlay"), $("portal-canvas"), $("portal-title"), $("portal-year"));
-const room = new SituationRoom($("simulate-root"), {
-  audio,
-  world,
-  onExit: () => {
-    location.hash = "/";
-  },
-});
 
 let carouselTimer = null;
 let resumeTimer = null;
@@ -108,9 +98,7 @@ function setView(name) {
   document.body.dataset.view = name;
   $("home-chrome").hidden = name !== "home";
   $("page-root").hidden = name !== "page";
-  $("simulate-root").hidden = name !== "simulate";
-  if (name !== "simulate") room.hide();
-  world.setMode(name === "simulate" ? "simulate" : name === "home" ? "home" : "page");
+  world.setMode(name === "home" ? "home" : "page");
 }
 
 function markNav(path) {
@@ -120,25 +108,6 @@ function markNav(path) {
   });
   $("nav-login").textContent = state.founder ? "Account" : "Login";
   $("nav-login").setAttribute("href", state.founder ? "#/account" : "#/login");
-}
-
-async function goSimulate({ transition = true } = {}) {
-  const c = civ();
-  stopCarousel();
-  if (transition) {
-    world.setMode("portal");
-    await portal.run(c, { onDive: (a) => world.dive(a) });
-    world.dive(0);
-  }
-  if (location.hash !== "#/simulate") {
-    suppressHash = true;
-    location.hash = "/simulate";
-    suppressHash = false;
-  }
-  setView("simulate");
-  world.setMode("simulate");
-  audio.playTheme(c);
-  room.start(c);
 }
 
 function renderRoute() {
@@ -162,8 +131,8 @@ function renderRoute() {
     return;
   }
 
-  if (path === "/simulate") {
-    goSimulate({ transition: false });
+  if (path === "/simulate" || path === "/demo") {
+    location.hash = "/";
     return;
   }
 
@@ -177,7 +146,6 @@ function renderRoute() {
 function bindChrome() {
   $("civ-prev").addEventListener("click", () => setCiv(currentIndex - 1, { fromUser: true }));
   $("civ-next").addEventListener("click", () => setCiv(currentIndex + 1, { fromUser: true }));
-  $("btn-simulate").addEventListener("click", () => goSimulate());
 
   $("nav-toggle").addEventListener("click", () => {
     const open = $("nav").classList.toggle("open");
@@ -241,7 +209,6 @@ function bindChrome() {
     if (document.body.dataset.view !== "home") return;
     if (e.key === "ArrowLeft") setCiv(currentIndex - 1, { fromUser: true });
     if (e.key === "ArrowRight") setCiv(currentIndex + 1, { fromUser: true });
-    if (e.key === "Enter") goSimulate();
     if (e.key === "m" || e.key === "M") muteBtn.click();
   });
 }
