@@ -248,7 +248,7 @@ function bindChrome() {
 }
 
 async function boot() {
-  state.audio.muted = false;
+  state.audio.muted = true;
   state.audio.master = 1;
   state.audio.music = 1;
   state.audio.sfx = 1;
@@ -257,10 +257,6 @@ async function boot() {
   bindChrome();
   await world.init();
   setCiv(currentIndex, { immediate: true });
-  try {
-    await audio.unlock();
-    audio.playTheme(civ());
-  } catch {}
   await paintQr();
   window.addEventListener("hashchange", renderRoute);
   renderRoute();
