@@ -23,7 +23,7 @@ export const LINKS = {
   instagram: "https://www.instagram.com/architectgenesis/",
   facebook: "https://www.facebook.com/architectgenesis",
   tiktok: "https://www.tiktok.com/@ArchitectGen",
-  discord: "https://discord.com/",
+  discord: "https://discord.gg/JHfm7HY9y",
   novel: "https://www.amazon.com/Josephus-Novel-B-Michael-Antler-ebook/dp/B089NYXM3B",
 };
 

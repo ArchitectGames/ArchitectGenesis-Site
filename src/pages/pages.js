@@ -105,7 +105,7 @@ const PAGES = {
         <span class="social-mark">f</span><span><strong>Facebook Page</strong><small>ArchitectGenesis</small></span>
       </a>
       <a class="social-card" href="${LINKS.discord}" target="_blank" rel="noopener">
-        <span class="social-mark">Dc</span><span><strong>Discord</strong><small>@architectgenesis</small></span>
+        <span class="social-mark">Dc</span><span><strong>Discord</strong><small>Join ArchitectGenesis</small></span>
       </a>
     </div>
     `
