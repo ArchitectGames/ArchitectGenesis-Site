@@ -160,7 +160,7 @@ function bindChrome() {
     const email = $("signup-email").value.trim();
     if (!email) return;
     $("signup-msg").hidden = false;
-    $("signup-msg").textContent = "You are on the list for launch news.";
+    $("signup-msg").textContent = "Submitting your email to the Founders List...";
     $("signup-email").value = "";
   });
 
