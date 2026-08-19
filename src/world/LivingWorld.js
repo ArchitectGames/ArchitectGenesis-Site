@@ -59,7 +59,11 @@ export class LivingWorld {
       };
 
       const geo = new THREE.PlaneGeometry(24, 13.5, 48, 32);
-      const mat = new THREE.MeshBasicMaterial({ map: this.textures[0], toneMapped: false });
+      const mat = new THREE.MeshBasicMaterial({
+        map: this.textures[0],
+        toneMapped: false,
+        side: THREE.DoubleSide,
+      });
       this.plane = new THREE.Mesh(geo, mat);
       this.plane.rotation.x = -0.72;
       this.scene.add(this.plane);
@@ -68,6 +72,7 @@ export class LivingWorld {
         toneMapped: false,
         transparent: true,
         opacity: 0,
+        side: THREE.DoubleSide,
       });
       this.planeB = new THREE.Mesh(geo.clone(), matB);
       this.planeB.rotation.x = -0.72;
