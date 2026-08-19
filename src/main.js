@@ -219,11 +219,7 @@ function bindChrome() {
   syncMute();
 
   $("vol-master").value = state.audio.master;
-  $("vol-music").value = state.audio.music;
-  $("vol-sfx").value = state.audio.sfx;
   $("vol-master").addEventListener("input", (e) => audio.setVolume("master", e.target.value));
-  $("vol-music").addEventListener("input", (e) => audio.setVolume("music", e.target.value));
-  $("vol-sfx").addEventListener("input", (e) => audio.setVolume("sfx", e.target.value));
 
   window.addEventListener("keydown", (e) => {
     if (document.body.dataset.view !== "home") return;
