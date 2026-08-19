@@ -214,6 +214,10 @@ body[data-view="simulate"] .vignette {
   gap: 10px;
 }
 
+.audio-dock[hidden] {
+  display: none !important;
+}
+
 .audio-trigger {
   display: flex;
   flex-direction: column;
