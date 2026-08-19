@@ -26,9 +26,6 @@ const PAGES = {
     </ol>
     <h2>Time Travel</h2>
     <p>After the first chapter, you may rewind. Buildings deconstruct, armies reverse, years run backward. Previously chosen directives remain visible, marked <strong>Already Explored</strong>, and cannot be selected again until the demonstration is restarted.</p>
-    <h2>This website demo</h2>
-    <p>The public demo is entirely rule-based. No AI requests occur. Every chapter, decision, consequence, and branch is handcrafted — three to five chapters in each of ten civilizations.</p>
-    <p><a class="primary" href="#/">Enter a civilization</a></p>
     `
   ),
   "/features": () => wrap(
@@ -72,8 +69,7 @@ const PAGES = {
     <div class="founder-note">
       <h2>About the Founder</h2>
       <p><strong>${FOUNDER.name}</strong> · ${FOUNDER.role}. ${FOUNDER.credentials}.</p>
-      <p>ArchitectGenesis began at the crossing of history, strategy, technology, and interactive simulation — the same instincts that led him to write <a href="${FOUNDER.novelUrl}" target="_blank" rel="noopener">${FOUNDER.novelTitle}</a>, a historical novel of Josephus and the Roman-Judean war.</p>
-      <p>ArchitectGenesis remains the subject of this page. The Founder is recorded because every civilization has one.</p>
+      <p>ArchitectGenesis began at the crossing of history, strategy, technology, and interactive simulation — the same instincts that led him to write <a href="${FOUNDER.novelUrl}" target="_blank" rel="noopener"><em>${FOUNDER.novelTitle}</em></a>, a historical novel of Josephus and the Roman-Judean war. <a class="amazon-link" href="${FOUNDER.novelUrl}" target="_blank" rel="noopener" aria-label="Read Josephus on Amazon" title="Read Josephus on Amazon"><span aria-hidden="true">a</span></a></p>
     </div>
     `
   ),
