@@ -258,14 +258,14 @@ export class AudioEngine {
 
   addAmbient(kind, dest) {
     const map = {
-      wind: [400, 0.03],
-      water: [600, 0.035],
-      market: [1200, 0.02],
-      ocean: [300, 0.045],
-      rain: [1100, 0.05],
-      city: [700, 0.03],
-      machine: [220, 0.04],
-      space: [180, 0.035],
+      wind: [400, 0.008],
+      water: [600, 0.012],
+      market: [1200, 0.006],
+      ocean: [300, 0.012],
+      rain: [1100, 0.012],
+      city: [700, 0.008],
+      machine: [220, 0.01],
+      space: [180, 0.008],
     };
     if (["fire", "chirp", "reed", "bird", "bell", "lyre", "gull", "horse", "steam", "grid", "traffic", "drone", "beacon"].includes(kind)) {
       this.pulseAmbient(kind, dest);
