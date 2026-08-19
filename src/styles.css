@@ -214,6 +214,13 @@ body[data-view="simulate"] .vignette {
   gap: 10px;
 }
 
+.audio-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
 .icon-btn {
   width: 36px;
   height: 36px;
@@ -236,29 +243,30 @@ body[data-view="simulate"] .vignette {
   content: "";
   position: absolute;
   top: 50%;
+  left: 50%;
+  width: 46px;
+  height: 46px;
   border: 1px solid var(--gold);
-  border-left: 0;
-  border-radius: 0 100% 100% 0;
-  transform: translateY(-50%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
   opacity: 0;
   pointer-events: none;
+  z-index: -1;
 }
 
 #btn-mute::before {
-  right: -9px;
-  width: 8px;
-  height: 18px;
+  width: 48px;
+  height: 48px;
 }
 
 #btn-mute::after {
-  right: -15px;
-  width: 14px;
-  height: 28px;
+  width: 66px;
+  height: 66px;
 }
 
 #btn-mute.is-on::before,
 #btn-mute.is-on::after {
-  animation: sound-wave 2.2s ease-out infinite;
+  animation: sound-wave 2.4s ease-out infinite;
 }
 
 #btn-mute.is-on::after {
@@ -266,12 +274,13 @@ body[data-view="simulate"] .vignette {
 }
 
 @keyframes sound-wave {
-  0%,
-  100% {
-    opacity: 0.2;
+  0% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(0.75);
   }
-  50% {
-    opacity: 0.8;
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.45);
   }
 }
 
@@ -302,8 +311,6 @@ body[data-view="simulate"] .vignette {
   z-index: 12;
 }
 
-.audio-dock:hover .audio-sliders,
-.audio-dock:focus-within .audio-sliders,
 .audio-sliders.open {
   display: flex;
 }
@@ -321,6 +328,15 @@ body[data-view="simulate"] .vignette {
 
 .audio-sliders input {
   width: 90px;
+}
+
+.audio-caption {
+  color: var(--muted);
+  font-size: 0.54rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .home-chrome {

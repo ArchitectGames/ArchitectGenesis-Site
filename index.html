@@ -58,11 +58,14 @@
       </nav>
 
       <div class="audio-dock" id="audio-dock">
-        <button type="button" id="btn-mute" class="icon-btn" aria-label="Unmute">
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-            <path fill="currentColor" d="M4 9v6h4l5 5V4L8 9H4zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z" />
-          </svg>
-        </button>
+        <div class="audio-trigger">
+          <button type="button" id="btn-mute" class="icon-btn" aria-label="Unmute">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path fill="currentColor" d="M4 9v6h4l5 5V4L8 9H4zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z" />
+            </svg>
+          </button>
+          <span class="audio-caption">Click for sound</span>
+        </div>
         <div class="audio-sliders" id="audio-sliders">
           <label>Volume <input id="vol-master" type="range" min="0" max="1" step="0.01" value="1" /></label>
         </div>

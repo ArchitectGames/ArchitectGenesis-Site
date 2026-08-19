@@ -203,6 +203,17 @@ function bindChrome() {
   $("qr-plaque").style.cursor = "pointer";
 
   const muteBtn = $("btn-mute");
+  const audioSliders = $("audio-sliders");
+  let sliderHideTimer = null;
+  const showAudioSliders = () => {
+    audioSliders.classList.add("open");
+    muteBtn.setAttribute("aria-expanded", "true");
+    clearTimeout(sliderHideTimer);
+    sliderHideTimer = setTimeout(() => {
+      audioSliders.classList.remove("open");
+      muteBtn.setAttribute("aria-expanded", "false");
+    }, 3000);
+  };
   const syncMute = () => {
     muteBtn.setAttribute("aria-label", state.audio.muted ? "Unmute" : "Mute");
     muteBtn.setAttribute("aria-pressed", state.audio.muted ? "false" : "true");
@@ -213,15 +224,19 @@ function bindChrome() {
     await audio.unlock();
     audio.setMuted(!state.audio.muted);
     if (!state.audio.muted) audio.playTheme(civ());
-    $("audio-sliders").classList.add("open");
-    muteBtn.setAttribute("aria-expanded", "true");
+    showAudioSliders();
     syncMute();
   });
   muteBtn.setAttribute("aria-expanded", "false");
   syncMute();
 
   $("vol-master").value = state.audio.master;
-  $("vol-master").addEventListener("input", (e) => audio.setVolume("master", e.target.value));
+  $("vol-master").addEventListener("input", (e) => {
+    audio.setVolume("master", e.target.value);
+    showAudioSliders();
+  });
+  audioSliders.addEventListener("pointermove", showAudioSliders);
+  audioSliders.addEventListener("focusin", showAudioSliders);
 
   window.addEventListener("keydown", (e) => {
     if (document.body.dataset.view !== "home") return;
