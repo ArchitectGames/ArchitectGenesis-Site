@@ -267,40 +267,6 @@ body[data-view="simulate"] .vignette {
   width: 90px;
 }
 
-.sound-hint {
-  position: fixed;
-  top: 92px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 14;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  background: rgba(7, 11, 20, 0.86);
-  border: 1px solid var(--line);
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-
-.sound-hint button {
-  background: var(--gold);
-  color: var(--navy);
-  border: 0;
-  padding: 7px 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.7rem;
-  cursor: pointer;
-}
-
-.text-btn {
-  background: transparent !important;
-  color: var(--gold) !important;
-  border: 0;
-  cursor: pointer;
-}
-
 .home-chrome {
   position: relative;
   z-index: 5;

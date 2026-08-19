@@ -211,9 +211,11 @@ function bindChrome() {
     await audio.unlock();
     audio.setMuted(!state.audio.muted);
     if (!state.audio.muted) audio.playTheme(civ());
-    $("sound-hint").hidden = true;
+    $("audio-sliders").classList.add("open");
+    muteBtn.setAttribute("aria-expanded", "true");
     syncMute();
   });
+  muteBtn.setAttribute("aria-expanded", "false");
   syncMute();
 
   $("vol-master").value = state.audio.master;
@@ -222,17 +224,6 @@ function bindChrome() {
   $("vol-master").addEventListener("input", (e) => audio.setVolume("master", e.target.value));
   $("vol-music").addEventListener("input", (e) => audio.setVolume("music", e.target.value));
   $("vol-sfx").addEventListener("input", (e) => audio.setVolume("sfx", e.target.value));
-
-  $("btn-enable-sound").addEventListener("click", async () => {
-    await audio.unlock();
-    audio.setMuted(false);
-    audio.playTheme(civ());
-    $("sound-hint").hidden = true;
-    syncMute();
-  });
-  $("btn-dismiss-sound").addEventListener("click", () => {
-    $("sound-hint").hidden = true;
-  });
 
   window.addEventListener("keydown", (e) => {
     if (document.body.dataset.view !== "home") return;
@@ -249,7 +240,6 @@ async function boot() {
   await world.init();
   setCiv(currentIndex, { immediate: true });
   await paintQr();
-  $("sound-hint").hidden = false;
   window.addEventListener("hashchange", renderRoute);
   renderRoute();
 }
