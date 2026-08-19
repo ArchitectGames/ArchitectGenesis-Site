@@ -227,6 +227,62 @@ body[data-view="simulate"] .vignette {
   font-size: 1.2rem;
 }
 
+#btn-mute {
+  position: relative;
+}
+
+#btn-mute::before,
+#btn-mute::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  border: 1px solid var(--gold);
+  border-left: 0;
+  border-radius: 0 100% 100% 0;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#btn-mute::before {
+  right: -9px;
+  width: 8px;
+  height: 18px;
+}
+
+#btn-mute::after {
+  right: -15px;
+  width: 14px;
+  height: 28px;
+}
+
+#btn-mute.is-on::before,
+#btn-mute.is-on::after {
+  animation: sound-wave 2.2s ease-out infinite;
+}
+
+#btn-mute.is-on::after {
+  animation-delay: 0.45s;
+}
+
+@keyframes sound-wave {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #btn-mute.is-on::before,
+  #btn-mute.is-on::after {
+    animation: none;
+    opacity: 0.55;
+  }
+}
+
 .icon-btn:hover {
   border-color: var(--gold);
   box-shadow: 0 0 16px rgba(212, 180, 131, 0.28);

@@ -205,6 +205,8 @@ function bindChrome() {
   const muteBtn = $("btn-mute");
   const syncMute = () => {
     muteBtn.setAttribute("aria-label", state.audio.muted ? "Unmute" : "Mute");
+    muteBtn.setAttribute("aria-pressed", state.audio.muted ? "false" : "true");
+    muteBtn.classList.toggle("is-on", !state.audio.muted);
     muteBtn.style.opacity = state.audio.muted ? "0.55" : "1";
   };
   muteBtn.addEventListener("click", async () => {
@@ -231,10 +233,19 @@ function bindChrome() {
 }
 
 async function boot() {
+  state.audio.muted = false;
+  state.audio.master = 1;
+  state.audio.music = 1;
+  state.audio.sfx = 1;
+  persist();
   buildDots();
   bindChrome();
   await world.init();
   setCiv(currentIndex, { immediate: true });
+  try {
+    await audio.unlock();
+    audio.playTheme(civ());
+  } catch {}
   await paintQr();
   window.addEventListener("hashchange", renderRoute);
   renderRoute();

@@ -3,10 +3,10 @@ const KEY = "ag.site.v1";
 const defaultState = () => ({
   civIndex: 0,
   audio: {
-    muted: true,
-    master: 0.7,
-    music: 0.55,
-    sfx: 0.7,
+    muted: false,
+    master: 1,
+    music: 1,
+    sfx: 1,
   },
   mailing: [],
   founder: null,
