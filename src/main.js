@@ -1,7 +1,7 @@
 import "./styles.css";
 import QRCode from "qrcode";
 import { CIVILIZATIONS } from "./data/civilizations.js";
-import { LINKS, CAROUSEL, asset } from "./config.js";
+import { LINKS, CAROUSEL, SIGNUP_ENDPOINT, asset } from "./config.js";
 import { state, persist } from "./state.js";
 import { LivingWorld } from "./world/LivingWorld.js";
 import { AudioEngine } from "./audio/AudioEngine.js";
@@ -156,12 +156,28 @@ function bindChrome() {
   });
   $("qr-plaque").style.cursor = "pointer";
 
-  $("signup-form").addEventListener("submit", () => {
+  $("signup-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
     const email = $("signup-email").value.trim();
     if (!email) return;
     $("signup-msg").hidden = false;
     $("signup-msg").textContent = "Submitting your email to the Founders List...";
-    $("signup-email").value = "";
+    const submitButton = $("signup-form").querySelector("button[type=submit]");
+    submitButton.disabled = true;
+    try {
+      const response = await fetch(SIGNUP_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!response.ok) throw new Error("Signup request failed");
+      $("signup-msg").textContent = "You are on the list for launch news.";
+      $("signup-email").value = "";
+    } catch {
+      $("signup-msg").textContent = "We could not add that email right now. Please try again.";
+    } finally {
+      submitButton.disabled = false;
+    }
   });
 
   const muteBtn = $("btn-mute");

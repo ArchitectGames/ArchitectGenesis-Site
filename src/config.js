@@ -13,6 +13,8 @@ export const SITE = {
   founderId: "00000001",
 };
 
+export const SIGNUP_ENDPOINT = "https://architectgenesis-signup.bryan-dab.workers.dev/";
+
 /**
  * Replace these with live listings and official channels before launch.
  * QR codes and social icons read from this object.

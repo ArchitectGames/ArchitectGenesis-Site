@@ -1,0 +1,9 @@
+name = "architectgenesis-signup"
+main = "index.js"
+compatibility_date = "2026-08-19"
+
+# Secret (set in Cloudflare, never commit the value):
+#   npx wrangler secret put RESEND_API_KEY --config cloudflare-worker/wrangler.toml
+
+[vars]
+RESEND_AUDIENCE_ID = "bd144934-9376-4f10-b7c5-02cb99023412"
