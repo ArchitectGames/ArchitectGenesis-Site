@@ -137,7 +137,8 @@ function renderRoute() {
     return;
   }
 
-  if (path === "/simulate" || path === "/demo" || path === "/store" || path === "/login") {
+  // Pricing route restore point: drop "/pricing" from this list when the page returns.
+  if (path === "/simulate" || path === "/demo" || path === "/store" || path === "/login" || path === "/pricing") {
     location.hash = "/";
     return;
   }

@@ -43,6 +43,7 @@ const PAGES = {
     <p class="notice">The full game adds persistent AI Architects, the ArchitectGenesis News Network, marketplace, and Great Houses. The website is the opening chapter, not the entire book.</p>
     `
   ),
+  // Pricing page restore point: this renderer stays; the route currently redirects home in main.js.
   "/pricing": () => wrap(
     "Pricing",
     "Support the simulation. Keep history permanent.",

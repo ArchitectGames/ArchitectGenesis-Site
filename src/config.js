@@ -46,7 +46,8 @@ export const NAV = [
   { href: "#/gameplay", label: "Gameplay" },
   { href: "#/features", label: "Features" },
   { href: "#/demo", label: "Demo" },
-  { href: "#/pricing", label: "Pricing" },
+  // Pricing nav restore point: re-enable when the pricing page returns.
+  // { href: "#/pricing", label: "Pricing" },
   { href: "#/store", label: "Store" },
   { href: "#/about", label: "About" },
   { href: "#/faq", label: "FAQ" },
