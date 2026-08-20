@@ -22,6 +22,14 @@ function civ() {
   return CIVILIZATIONS[currentIndex];
 }
 
+function formatCivYear(year) {
+  const match = String(year).match(/^(.*?)(?:\s+(BC|AD|BCE|CE))?$/i);
+  const value = (match?.[1] || year).trim();
+  const suffix = match?.[2] || "";
+  if (!suffix) return `<span class="civ-year-value">${value}</span>`;
+  return `<span class="civ-year-value">${value}</span> <span class="civ-year-suffix">${suffix}</span>`;
+}
+
 function setCiv(index, { fromUser = false, immediate = false } = {}) {
   currentIndex = (index + CIVILIZATIONS.length) % CIVILIZATIONS.length;
   state.civIndex = currentIndex;
@@ -29,7 +37,7 @@ function setCiv(index, { fromUser = false, immediate = false } = {}) {
   const c = civ();
   $("civ-era").textContent = c.era;
   $("civ-name").textContent = c.name;
-  $("civ-year").textContent = c.year;
+  $("civ-year").innerHTML = formatCivYear(c.year);
   $("civ-slogan").textContent = c.slogan;
   world.setCivilization(currentIndex, { immediate });
   audio.playTheme(c);

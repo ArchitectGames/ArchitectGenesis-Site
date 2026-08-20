@@ -597,8 +597,17 @@ body[data-view="simulate"] .vignette {
   font-family: var(--serif);
   font-size: 1.5rem;
   font-weight: 700;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  font-synthesis: none;
+  white-space: nowrap;
   color: var(--gold-2);
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+}
+
+.civ-year-value,
+.civ-year-suffix {
+  font: inherit;
 }
 
 .civ-slogan {
