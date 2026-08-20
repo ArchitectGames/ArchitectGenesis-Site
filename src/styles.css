@@ -576,10 +576,12 @@ body[data-view="simulate"] .vignette {
 }
 
 .civ-era {
-  font-size: 0.72rem;
+  font-size: 0.92rem;
+  font-weight: 600;
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--gold);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
 }
 
 .civ-board h1 {
@@ -593,15 +595,20 @@ body[data-view="simulate"] .vignette {
 
 .civ-year {
   font-family: var(--serif);
-  font-size: 1.25rem;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: var(--gold-2);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
 }
 
 .civ-slogan {
   font-family: var(--serif);
   font-style: italic;
+  font-size: 1.1rem;
+  font-weight: 600;
   color: var(--muted);
   margin-top: 4px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
 }
 
 .carousel {
