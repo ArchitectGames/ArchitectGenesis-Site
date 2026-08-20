@@ -160,6 +160,7 @@ function bindChrome() {
     e.preventDefault();
     const email = $("signup-email").value.trim();
     if (!email) return;
+    const company = $("signup-company") ? $("signup-company").value : "";
     $("signup-msg").hidden = false;
     $("signup-msg").textContent = "Submitting your email to the Founders List...";
     const submitButton = $("signup-form").querySelector("button[type=submit]");
@@ -168,7 +169,7 @@ function bindChrome() {
       const response = await fetch(SIGNUP_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, company }),
       });
       if (!response.ok) throw new Error("Signup request failed");
       $("signup-msg").textContent = "You are on the list for launch news.";

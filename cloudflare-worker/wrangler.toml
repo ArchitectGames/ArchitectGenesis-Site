@@ -7,3 +7,12 @@ compatibility_date = "2026-08-19"
 
 [vars]
 RESEND_AUDIENCE_ID = "bd144934-9376-4f10-b7c5-02cb99023412"
+
+# 5 signup attempts per IP per 60 seconds. Hourly cap is enforced in Worker code.
+[[ratelimits]]
+name = "SIGNUP_LIMIT"
+namespace_id = "23412"
+
+  [ratelimits.simple]
+  limit = 5
+  period = 60

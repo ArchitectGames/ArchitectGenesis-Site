@@ -9,6 +9,9 @@ const ALLOWED_ORIGINS = new Set([
   "http://127.0.0.1:4173",
 ]);
 
+const HOURLY_LIMIT = 8;
+const HOUR_SEC = 3600;
+
 function corsHeaders(request) {
   const origin = request.headers.get("Origin") || "";
   const headers = {
@@ -29,6 +32,29 @@ function json(request, data, status = 200) {
   });
 }
 
+function clientIp(request) {
+  return (
+    request.headers.get("CF-Connecting-IP") ||
+    (request.headers.get("X-Forwarded-For") || "").split(",")[0].trim()
+  );
+}
+
+async function overHourlyLimit(ip) {
+  if (!ip) return false;
+  const cache = caches.default;
+  const key = new Request(`https://signup-limit.architectgenesis.internal/${ip}`);
+  const hit = await cache.match(key);
+  const count = hit ? Number(await hit.text()) || 0 : 0;
+  if (count >= HOURLY_LIMIT) return true;
+  await cache.put(
+    key,
+    new Response(String(count + 1), {
+      headers: { "Cache-Control": `max-age=${HOUR_SEC}` },
+    })
+  );
+  return false;
+}
+
 function alreadyOnList(status, details) {
   if (status === 409) return true;
   return /already exists|already a contact|already been added/i.test(details);
@@ -44,11 +70,27 @@ export default {
       return json(request, { error: "Method not allowed" }, 405);
     }
 
+    const ip = clientIp(request);
+    if (env.SIGNUP_LIMIT) {
+      const { success } = await env.SIGNUP_LIMIT.limit({ key: ip || "unknown" });
+      if (!success) {
+        return json(request, { error: "Too many attempts" }, 429);
+      }
+    }
+
+    if (await overHourlyLimit(ip)) {
+      return json(request, { error: "Too many attempts" }, 429);
+    }
+
     let body;
     try {
       body = await request.json();
     } catch {
       return json(request, { error: "Invalid JSON" }, 400);
+    }
+
+    if (String(body.company || "").trim()) {
+      return json(request, { ok: true });
     }
 
     const email = String(body.email || "").trim().toLowerCase();
